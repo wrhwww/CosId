@@ -16,14 +16,16 @@ jobs:
           --health-retries 5
         ports:
           - 6379:6379
-
       cosid-proxy:
         image: ahoowang/cosid-proxy:main
+        env:
+          SPRING_REDIS_URL: redis://redis:6379
         options: >-
           --health-cmd "curl --fail --silent localhost:8688/actuator/health | grep UP || exit 1"
           --health-interval 10s
           --health-timeout 10s
           --health-retries 10
+          --link redis
         ports:
           - 8688:8688
     steps:
